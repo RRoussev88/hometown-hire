@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --brand-primary-color: #F5BEB5;
+  --brand-secondary-color: #FDFCF2;
+}
+
 html,
 body {
   padding: 0;
