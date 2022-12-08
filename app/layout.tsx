@@ -13,7 +13,7 @@ export default function RootLayout({
       <Head />
       <body>
         <Navbar />
-        {children}
+        <main className="flex-auto shrink-0">{children}</main>
         <Footer />
       </body>
     </html>

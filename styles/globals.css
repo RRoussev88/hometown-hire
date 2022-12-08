@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --brand-primary-color: #F5BEB5;
-  --brand-secondary-color: #FDFCF2;
+  --brand-primary-color: #f5beb5;
+  --brand-secondary-color: #fdfcf2;
 }
 
 html,
@@ -13,6 +13,9 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 a {

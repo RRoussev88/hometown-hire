@@ -1,8 +1,25 @@
+"use client";
 import { FC, useState } from "react";
+import { BASE_URL } from "../common/utils";
 
-type SearchFormType = { handleSearch: (term: string) => void };
+const getBusinesses = async (searchTerm: string) => {
+  console.log(searchTerm);
+  const url = new URL(`${BASE_URL}/businesses/records`);
+  url.searchParams.set("page", "1");
+  url.searchParams.set("perPage", "20");
+  url.searchParams.set("sort", "name");
+  if (searchTerm) {
+    url.searchParams.set("filter", `name="${searchTerm}"`);
+  }
+  // TODO: use pockebase npm library
 
-export const SearchForm: FC<SearchFormType> = ({ handleSearch }) => {
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data?.items;
+};
+
+export const SearchForm: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
@@ -18,7 +35,7 @@ export const SearchForm: FC<SearchFormType> = ({ handleSearch }) => {
         <button
           type="button"
           className="btn btn-primary btn-square"
-          onClick={() => handleSearch(searchTerm)}
+          onClick={() => getBusinesses(searchTerm)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
