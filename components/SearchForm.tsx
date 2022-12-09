@@ -35,7 +35,7 @@ export const SearchForm: FC = () => {
         <button
           type="button"
           className="btn btn-primary btn-square"
-          onClick={() => getBusinesses(searchTerm)}
+          onClick={() => getBusinesses(searchTerm.trim())}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

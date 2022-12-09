@@ -6,18 +6,27 @@ export const Navbar: FC = () => (
   <div className="navbar bg-primary">
     <div className="flex-1">
       <Link href="/" className="btn btn-ghost normal-case text-xl">
-        <Image src="/brandIcon.png" alt="Brand image" width={30} height={30} className="mr-2" />
+        <Image
+          src="/brandIcon.png"
+          alt="Brand image"
+          width={30}
+          height={30}
+          className="mr-2"
+        />
         Hiretown
       </Link>
     </div>
     <div className="flex-none">
       <ul className="menu menu-horizontal p-0 bg-primary">
-          <Link href="/profile" className="btn btn-ghost normal-case text-base">
-            Profile
-          </Link>
-        <Link href="/login" className="btn btn-ghost normal-case text-base">
-            Login
-          </Link>
+        <Link href="/profile" className="btn btn-ghost normal-case text-base">
+          Profile
+        </Link>
+        <label
+          htmlFor="login-modal"
+          className="btn btn-ghost normal-case text-base"
+        >
+          Login
+        </label>
         <li tabIndex={0}>
           <a>
             EN
