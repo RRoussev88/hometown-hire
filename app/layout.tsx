@@ -1,5 +1,4 @@
 import "../styles/globals.css";
-import Head from "./head";
 import { Footer, ModalDialog, Navbar, LoginForm } from "../components";
 
 export default function RootLayout({
@@ -9,14 +8,12 @@ export default function RootLayout({
 }) {
   return (
     <html data-theme="bumblebee">
-      <Head />
+      <head></head>
       <body>
         <Navbar />
         <main className="flex-auto shrink-0">{children}</main>
         <Footer />
-        <ModalDialog>
-          <LoginForm />
-        </ModalDialog>
+        <ModalDialog toggleId="login-modal" Content={LoginForm} />
       </body>
     </html>
   );
