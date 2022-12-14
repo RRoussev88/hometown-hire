@@ -1,8 +1,6 @@
 import { useEffect, useState, MutableRefObject } from "react";
 
-export const useIsVisible = (
-  ref: MutableRefObject<HTMLElement | null>
-) => {
+export const useIsVisible = (ref: MutableRefObject<HTMLElement | null>) => {
   const [isIntersecting, setIntersecting] = useState(false);
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import "../styles/globals.css";
-import { Footer, ModalDialog, Navbar, LoginForm } from "../components";
+import { Footer, Navbar, LoginForm } from "../components";
+import { GlobalProvider } from "../context/GlobalContext";
 
 export default function RootLayout({
   children,
@@ -10,10 +11,12 @@ export default function RootLayout({
     <html data-theme="bumblebee">
       <head></head>
       <body>
-        <Navbar />
-        <main className="flex-auto shrink-0">{children}</main>
+        <GlobalProvider>
+          <Navbar />
+          <main className="flex-auto shrink-0">{children}</main>
+          <LoginForm />
+        </GlobalProvider>
         <Footer />
-        <ModalDialog toggleId="login-modal" Content={LoginForm} />
       </body>
     </html>
   );

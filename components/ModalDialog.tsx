@@ -1,21 +1,26 @@
 "use client";
 import clsx from "clsx";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, PropsWithChildren, useRef } from "react";
 import { useIsVisible } from "../common";
 
-export type ContentComponentType = { isOpen: boolean; onClose: () => void };
+type ModalDialogType = {
+  isModalOpen: boolean;
+  modalId: string;
+  onToggle: () => void;
+};
 
-type ModalDialogType = { toggleId: string; Content: FC<ContentComponentType> };
-
-export const ModalDialog: FC<ModalDialogType> = ({ Content, toggleId }) => {
+export const ModalDialog: FC<PropsWithChildren<ModalDialogType>> = ({
+  children,
+  isModalOpen,
+  modalId,
+  onToggle,
+}) => {
   const ref = useRef<HTMLLabelElement | null>(null);
   const isCloseBtnVisible = useIsVisible(ref);
 
-  const [isOpen, setIsOpen] = useState(false);
-
   const toggleOpen = (event: any) => {
     event.stopPropagation();
-    setIsOpen((prevState) => !prevState);
+    onToggle();
   };
 
   const onBackdropClick = (
@@ -31,9 +36,9 @@ export const ModalDialog: FC<ModalDialogType> = ({ Content, toggleId }) => {
     <>
       <input
         type="checkbox"
-        id={toggleId}
+        id={modalId}
         className="modal-toggle"
-        checked={isOpen}
+        checked={isModalOpen}
         onChange={toggleOpen}
       />
       <div
@@ -41,18 +46,18 @@ export const ModalDialog: FC<ModalDialogType> = ({ Content, toggleId }) => {
         onClickCapture={onBackdropClick}
         className={clsx(
           "modal modal-bottom sm:modal-middle",
-          isOpen && "modal-open"
+          isModalOpen && "modal-open"
         )}
       >
         <div className="modal-box relative sm:pt-12">
           <label
             ref={ref}
-            htmlFor={toggleId}
+            htmlFor={modalId}
             className="hidden sm:inline-flex btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
           </label>
-          <Content isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          {children}
         </div>
       </div>
     </>

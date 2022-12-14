@@ -1,25 +1,19 @@
 "use client";
-
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { NextPage } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { BASE_URL } from "../../common/utils";
-
-const getProfile = async (searchTerm: string) => {
-  console.log(searchTerm);
-  const url = new URL(`${BASE_URL}/businesses/records`);
-  url.searchParams.set("page", "1");
-  url.searchParams.set("perPage", "20");
-  url.searchParams.set("sort", "name");
-  // TODO: use pockebase npm library
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  return data?.items;
-};
+import { StorageKeys } from "../../common";
+import { GlobalContext } from "../../context/GlobalContext";
 
 const Profile: NextPage = () => {
+  const router = useRouter();
+  const { [StorageKeys.CURRENT_USER]: user } = useContext(GlobalContext);
+
+  useEffect(() => {
+    !user && router.replace("/");
+  }, [user, router]);
+
   return (
     <section>
       <div className="m-2 sm:m-5 flex gap-x-3">
