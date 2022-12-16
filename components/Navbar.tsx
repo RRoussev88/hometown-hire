@@ -1,13 +1,19 @@
 "use client";
-import { FC, useContext } from "react";
+import { FC, useContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { StorageKeys } from "../common";
 import { GlobalContext } from "../context/GlobalContext";
 
 export const Navbar: FC = () => {
+  const router = useRouter();
   const { [StorageKeys.CURRENT_USER]: user, logoutUser } =
     useContext(GlobalContext);
+
+    useEffect(() => {
+      !user && router.replace("/");
+    }, [user, router]);
 
   return (
     <div className="navbar bg-primary">
@@ -28,7 +34,7 @@ export const Navbar: FC = () => {
           {user ? (
             <li>
               <span>Profile</span>
-              <ul className="p-2 bg-primary">
+              <ul className="p-2 bg-primary z-20">
                 <li>
                   <Link
                     href="/profile"
@@ -69,7 +75,7 @@ export const Navbar: FC = () => {
                 <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
               </svg>
             </a>
-            <ul className="p-2 bg-primary">
+            <ul className="p-2 bg-primary z-20">
               <li>
                 <a>FR</a>
               </li>

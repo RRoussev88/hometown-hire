@@ -26,7 +26,7 @@ export const ModalDialog: FC<PropsWithChildren<ModalDialogType>> = ({
   const onBackdropClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) =>
-    // Only close modal is the backdrop is clicked
+    // Only close modal if the backdrop is clicked
     // and if the close button is not present
     (event.target as EventTarget & { id?: string }).id == "modal-backdrop" &&
     !isCloseBtnVisible &&
