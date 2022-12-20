@@ -3,6 +3,7 @@ import { FC, useContext } from "react";
 import Image from "next/image";
 import { FILE_URL, StorageKeys } from "../../common/utils";
 import { GlobalContext } from "../../context/GlobalContext";
+import { HamburgerIcon } from "../../components";
 
 export const ProfileHeader: FC = () => {
   const { [StorageKeys.CURRENT_USER]: user } = useContext(GlobalContext);
@@ -34,20 +35,7 @@ export const ProfileHeader: FC = () => {
         htmlFor="left-side-drawer"
         className="btn btn-square btn-outline drawer-button mr-auto lg:hidden"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="3"
-            d="M1 2l24 0M1 12l24 0M1 22l24 0"
-          />
-        </svg>
+        <HamburgerIcon />
       </label>
     </div>
   );
