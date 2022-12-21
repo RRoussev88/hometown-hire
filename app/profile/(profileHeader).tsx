@@ -6,13 +6,14 @@ import { GlobalContext } from "../../context/GlobalContext";
 import { HamburgerIcon } from "../../components";
 
 export const ProfileHeader: FC = () => {
-  const { [StorageKeys.CURRENT_USER]: user } = useContext(GlobalContext);
+  const { [StorageKeys.CURRENT_USER]: user, logoutUser } =
+    useContext(GlobalContext);
   const avatarAbbr =
     user?.name.split(" ").reduce((acc, curr) => `${acc}${curr[0]}`, "") ?? "";
 
   return (
     <div className="m-2 sm:m-5 flex flex-row-reverse lg:flex-row gap-x-3">
-      <div className="avatar placeholder online">
+      <div className="avatar placeholder max-sm:hidden">
         <div className="bg-neutral-focus text-neutral-content rounded-full w-24">
           {user?.avatar ? (
             <Image
@@ -30,6 +31,9 @@ export const ProfileHeader: FC = () => {
       <div className="self-center">
         <h3 className="text-2xl">{user?.name}</h3>
         <p className="text-base">{user?.email}</p>
+        <button className="btn btn-primary btn-sm" onClick={logoutUser}>
+          Logout
+        </button>
       </div>
       <label
         htmlFor="left-side-drawer"

@@ -1,5 +1,6 @@
 "use client";
 import { createContext, FC, PropsWithChildren, useState } from "react";
+import { useRouter } from "next/navigation";
 import { StorageKeys, User } from "../common";
 
 export type GlobalStateType = {
@@ -37,6 +38,7 @@ const globalState: GlobalStateType = {
 export const GlobalContext = createContext<GlobalStateType>(globalState);
 
 export const GlobalProvider: FC<PropsWithChildren> = ({ children }) => {
+  const router = useRouter();
   const [state, setState] = useState<GlobalStateType>(globalState);
 
   return (
@@ -44,6 +46,7 @@ export const GlobalProvider: FC<PropsWithChildren> = ({ children }) => {
       value={{
         ...state,
         logoutUser() {
+          router.replace("/");
           setState((prevState) => ({
             ...prevState,
             accessToken: "",
@@ -63,6 +66,7 @@ export const GlobalProvider: FC<PropsWithChildren> = ({ children }) => {
             StorageKeys.CURRENT_USER,
             JSON.stringify(currentUser)
           );
+          router.push("/profile");
         },
       }}
     >

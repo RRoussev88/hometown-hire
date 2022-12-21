@@ -8,8 +8,8 @@ const Home: NextPage = () => (
     style={{ backgroundImage: `url("https://placeimg.com/1000/800/arch")` }}
   >
     <div className="hero-overlay bg-opacity-60"></div>
-    <div className="hero-content text-center text-primary p-6 sm:p-12">
-      <div className="max-w-sm">
+    <div className="hero-content text-center text-primary p-0 m-6 sm:m-12">
+      <div className="max-w-xl">
         <h1 className="mb-5 text-2xl sm:text-5xl font-bold">
           Welcome to&nbsp;<Link href="/">Hiretown</Link>
         </h1>
