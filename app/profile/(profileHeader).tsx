@@ -8,8 +8,9 @@ import { HamburgerIcon } from "../../components";
 export const ProfileHeader: FC = () => {
   const { [StorageKeys.CURRENT_USER]: user, logoutUser } =
     useContext(GlobalContext);
-  const avatarAbbr =
-    user?.name.split(" ").reduce((acc, curr) => `${acc}${curr[0]}`, "") ?? "";
+  const avatarAbbr = user?.name
+    ? user.name.split(" ").reduce((acc, curr) => `${acc}${curr[0]}`, "")
+    : user?.email.split("@")[0].slice(0, 8);
 
   return (
     <div className="m-2 sm:m-5 flex flex-row-reverse lg:flex-row gap-x-3">
@@ -29,7 +30,7 @@ export const ProfileHeader: FC = () => {
         </div>
       </div>
       <div className="self-center">
-        <h3 className="text-2xl">{user?.name}</h3>
+        {!!user?.name && <h3 className="text-2xl">{user?.name}</h3>}
         <p className="text-base">{user?.email}</p>
         <button className="btn btn-primary btn-sm" onClick={logoutUser}>
           Logout

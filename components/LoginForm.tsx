@@ -1,8 +1,7 @@
 "use client";
 import clsx from "clsx";
-import Link from "next/link";
 import { FC, useContext, useEffect, useState } from "react";
-import { BASE_URL, StorageKeys, User } from "../common";
+import { BASE_URL, User } from "../common";
 import { GlobalContext } from "../context/GlobalContext";
 import { ModalDialog } from "./ModalDialog";
 
@@ -72,11 +71,15 @@ export const LoginForm: FC = () => {
           className="btn btn-primary w-full mb-3"
           onClick={handleLogin}
         >
-          Login
+          Sign in
         </button>
-        <Link className="link link-primary" href="/register">
-          No account yet? Click here to register
-        </Link>
+        <label
+          className="link link-primary"
+          htmlFor="register-modal"
+          onClick={() => setIsOpen(false)}
+        >
+          No account yet? Click here to Sign up
+        </label>
       </form>
     </ModalDialog>
   );
