@@ -1,17 +1,28 @@
 "use client";
 import clsx from "clsx";
 import { FC, useContext, useEffect, useState } from "react";
-import { BASE_URL, User } from "../common";
+import {
+  BASE_URL,
+  emailValidator,
+  passwordValidator,
+  User,
+  useValidatedInput,
+} from "../common";
 import { GlobalContext } from "../context/GlobalContext";
 import { ModalDialog } from "./ModalDialog";
 
 export const LoginForm: FC = () => {
   const { loginUser } = useContext(GlobalContext);
 
+  const [email, setEmail, isEmailValid] = useValidatedInput(emailValidator);
+  const [password, setPassword, isPasswordValid] =
+    useValidatedInput(passwordValidator);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoginDisabled, setIsLoginDisabled] = useState(
+    () => !isEmailValid || !isPasswordValid
+  );
 
   const handleLogin = async () => {
     const response = await fetch(`${BASE_URL}/users/auth-with-password`, {
@@ -21,12 +32,13 @@ export const LoginForm: FC = () => {
     });
 
     if (response.ok) {
-      setError("");
       const data: { record: User; token: string } = await response.json();
+      setError("");
       loginUser(data.record, data.token);
       setIsOpen(false);
     } else {
-      setError(response.statusText);
+      const data: { message: string } = await response.json();
+      setError(data.message);
     }
   };
 
@@ -36,7 +48,12 @@ export const LoginForm: FC = () => {
       setPassword("");
       setError("");
     }
-  }, [isOpen]);
+  }, [isOpen, setEmail, setPassword]);
+
+  useEffect(() => {
+    // TODO: Validate after submit button click
+    setIsLoginDisabled(!isEmailValid || !isPasswordValid);
+  }, [isEmailValid, isPasswordValid]);
 
   return (
     <ModalDialog
@@ -46,29 +63,34 @@ export const LoginForm: FC = () => {
     >
       <form className="flex flex-col items-center">
         <input
-          type="text"
+          required
+          aria-required
+          type="email"
           placeholder="Email"
           className={clsx(
-            "input input-bordered w-full mb-5",
+            "input input-bordered w-full mb-4",
             !!error && "input-error"
           )}
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
         <input
+          required
+          aria-required
           type="password"
           placeholder="Password"
           className={clsx(
-            "input input-bordered w-full mb-5",
+            "input input-bordered w-full mb-4",
             !!error && "input-error"
           )}
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        {!!error && <p className="badge badge-error mb-5">{error}</p>}
+        {!!error && <p className="badge badge-error mb-4">{error}</p>}
         <button
+          disabled={isLoginDisabled}
           type="button"
-          className="btn btn-primary w-full mb-3"
+          className="btn btn-primary w-full mb-4"
           onClick={handleLogin}
         >
           Sign in

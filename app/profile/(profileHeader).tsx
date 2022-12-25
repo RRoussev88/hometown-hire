@@ -38,7 +38,7 @@ export const ProfileHeader: FC = () => {
       </div>
       <label
         htmlFor="left-side-drawer"
-        className="btn btn-square btn-outline drawer-button mr-auto lg:hidden"
+        className="btn btn-square btn-ghost drawer-button mr-auto lg:hidden"
       >
         <HamburgerIcon />
       </label>

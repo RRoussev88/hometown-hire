@@ -80,7 +80,7 @@ export const Navbar: FC = () => {
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
-            className="btn btn-square btn-outline mr-auto lg:hidden"
+            className="btn btn-square btn-ghost mr-auto lg:hidden"
           >
             <HamburgerIcon />
           </label>
