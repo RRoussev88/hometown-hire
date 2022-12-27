@@ -1,22 +1,7 @@
 "use client";
 import { FC, useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { BASE_URL, Service, ServiceCategory } from "../common";
-
-const getBusinesses = async (searchTerm?: string) => {
-  const url = new URL(`${BASE_URL}/businesses/records`);
-  url.searchParams.set("page", "1");
-  url.searchParams.set("perPage", "20");
-  url.searchParams.set("sort", "name");
-  if (searchTerm) {
-    url.searchParams.set("filter", `name="${searchTerm}"`);
-  }
-  // TODO: use pockebase npm library
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  return data?.items;
-};
 
 const useCategories = () => {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
@@ -70,14 +55,21 @@ const useServices = (category: string | null) => {
 };
 
 export const SearchForm: FC = () => {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ServiceCategory | null>(null);
-
   const categories = useCategories();
+  const [selectedCategory, setSelectedCategory] =
+    useState<ServiceCategory | null>(() => categories?.[0] ?? null);
+
   const services = useServices(selectedCategory?.id ?? null);
+  const [selectedService, setSelectedService] = useState<Service | null>(
+    () => services?.[0] ?? null
+  );
+
+  useEffect(() => {
+    setSelectedService(services?.[0]);
+  }, [services]);
 
   return (
-    <form className="rounded-md p-4 bg-base-200 text-accent form-control gap-2">
+    <form className="rounded-md p-4 bg-base-100 shadow-xl text-accent form-control gap-2">
       <div className="flex flex-row max-sm:flex-col gap-2">
         <div className="form-control w-full sm:w-1/2">
           <label className="label">Category</label>
@@ -98,7 +90,16 @@ export const SearchForm: FC = () => {
         </div>
         <div className="form-control w-full sm:w-1/2">
           <label className="label">Service</label>
-          <select className="select select-bordered truncate">
+          <select
+            className="select select-bordered truncate"
+            onChange={(event) =>
+              setSelectedService(
+                services.find(
+                  (category) => category.name === event.target.value
+                ) ?? null
+              )
+            }
+          >
             {services.map((service: Service) => (
               <option key={service.id}>{service.name}</option>
             ))}
@@ -113,10 +114,9 @@ export const SearchForm: FC = () => {
           </select>
         </div>
       </div>
-      <button
-        type="button"
+      <Link
+        href={`/search?serviceId=${selectedService?.id}`}
         className="btn btn-primary"
-        onClick={() => getBusinesses()}
       >
         Search&nbsp;
         <svg
@@ -133,7 +133,7 @@ export const SearchForm: FC = () => {
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-      </button>
+      </Link>
     </form>
   );
 };

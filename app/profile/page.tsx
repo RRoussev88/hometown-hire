@@ -1,7 +1,7 @@
 "use client";
 import { NextPage } from "next";
 
-const NotFound: NextPage = () => {
+const ProfilePage: NextPage = () => {
   return (
     <>
       <div className="hero-content text-center text-neutral-content mx-3">
@@ -13,4 +13,4 @@ const NotFound: NextPage = () => {
   );
 };
 
-export default NotFound;
+export default ProfilePage;

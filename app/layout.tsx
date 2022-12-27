@@ -13,7 +13,7 @@ export default function RootLayout({
       <body>
         <GlobalProvider>
           <Navbar />
-          <main className="flex-auto shrink-0">{children}</main>
+          <main className="bg-base-200 flex-auto shrink-0">{children}</main>
           <LoginForm />
           <RegisterForm />
         </GlobalProvider>
