@@ -60,3 +60,11 @@ export interface Business extends CollectionRecord {
   socialMediaLinks: Record<string, string>;
   thumbnail: string;
 }
+
+export type APIResponse<T = object> = {
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  items: T[];
+};

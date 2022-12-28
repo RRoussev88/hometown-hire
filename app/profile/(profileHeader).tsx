@@ -1,7 +1,7 @@
 "use client";
 import { FC, useContext } from "react";
 import Image from "next/image";
-import { FILE_URL, StorageKeys } from "../../common/utils";
+import { FILE_API_URL, StorageKeys } from "../../common/utils";
 import { GlobalContext } from "../../context/GlobalContext";
 import { HamburgerIcon } from "../../components";
 
@@ -19,7 +19,7 @@ export const ProfileHeader: FC = () => {
           {user?.avatar ? (
             <Image
               loader={({ src }) => src}
-              src={`${FILE_URL}/${user.collectionId}/${user.id}/${user.avatar}?thumb=100x100`}
+              src={`${FILE_API_URL}/${user.collectionId}/${user.id}/${user.avatar}?thumb=100x100`}
               alt="Avatar image"
               width={100}
               height={100}

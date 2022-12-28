@@ -25,10 +25,9 @@ export const LoginForm: FC = () => {
   );
 
   const handleLogin = async () => {
-    const response = await fetch(`${BASE_URL}/users/auth-with-password`, {
+    const response = await fetch(`${BASE_URL}/signin`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ identity: email, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if (response.ok) {
@@ -37,8 +36,8 @@ export const LoginForm: FC = () => {
       loginUser(data.record, data.token);
       setIsOpen(false);
     } else {
-      const data: { message: string } = await response.json();
-      setError(data.message);
+      const data: { error: string } = await response.json();
+      setError(data.error);
     }
   };
 

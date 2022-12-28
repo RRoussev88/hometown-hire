@@ -32,22 +32,17 @@ export const RegisterForm: FC = () => {
       return;
     }
 
-    const signUpResponse = await fetch(`${BASE_URL}/users/records`, {
+    const signUpResponse = await fetch(`${BASE_URL}/signup`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, passwordConfirm }),
     });
 
     if (signUpResponse.ok) {
       setError("");
-      const signInResponse = await fetch(
-        `${BASE_URL}/users/auth-with-password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ identity: email, password }),
-        }
-      );
+      const signInResponse = await fetch(`${BASE_URL}/signin`, {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
 
       if (signInResponse.ok) {
         setError("");

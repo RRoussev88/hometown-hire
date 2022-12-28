@@ -1,22 +1,19 @@
 import type { Business } from "../../common";
-import { BASE_URL } from "../../common/utils";
+import { BASE_URL, isApiResponse } from "../../common/utils";
 import { BusinessCard, SearchForm } from "../../components";
 
 const getBusinesses = async (searchTerm?: string) => {
-  const url = new URL(`${BASE_URL}/businesses/records`);
-  url.searchParams.set("page", "1");
-  url.searchParams.set("perPage", "20");
-  url.searchParams.set("sort", "name");
-  url.searchParams.set("expand", "services");
-  if (searchTerm) {
-    url.searchParams.set("filter", `services ~ "${searchTerm}"`);
+  const response = await fetch(
+    `${BASE_URL}/businesses?serviceId=${searchTerm}`
+  );
+
+  // TODO: Use the error message sent by the API
+  // TODO: Use pagination
+  if (response.ok) {
+    const data: unknown = await response.json();
+    return isApiResponse<Business>(data) ? data.items : [];
   }
-  // TODO: use pockebase npm library
-
-  const response = await fetch(url);
-  const data: { items: Business[] } = await response.json();
-
-  return data?.items;
+  return [];
 };
 
 export default async function SearchPage({
@@ -24,7 +21,7 @@ export default async function SearchPage({
 }: {
   searchParams: { serviceId?: string };
 }) {
-  const businesses = await getBusinesses(searchParams.serviceId);
+  const businesses: Business[] = await getBusinesses(searchParams.serviceId);
 
   return (
     <main className="p-6">
@@ -42,7 +39,7 @@ export default async function SearchPage({
           <p className="bg-base-100 p-6 rounded-lg shadow-xl">
             {searchParams.serviceId && searchParams.serviceId !== "undefined"
               ? "No businesses offering that service"
-              : "No services in that category"}
+              : "No service is selected"}
           </p>
         )}
       </section>

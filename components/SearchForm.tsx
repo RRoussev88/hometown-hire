@@ -1,21 +1,28 @@
 "use client";
 import { FC, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { BASE_URL, Service, ServiceCategory } from "../common";
+import {
+  BASE_URL,
+  BASE_API_URL,
+  isApiResponse,
+  Service,
+  ServiceCategory,
+} from "../common";
 
 const useCategories = () => {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
 
   const fetchData = async () => {
-    const url = new URL(`${BASE_URL}/serviceCategories/records`);
-    url.searchParams.set("page", "1");
-    url.searchParams.set("perPage", "20");
-    url.searchParams.set("sort", "name");
+    const response = await fetch(`${BASE_URL}/serviceCategories`);
 
-    const response = await fetch(url);
-    const data = await response.json();
-
-    setCategories(data?.items);
+    // TODO: Use the error message sent by the API
+    // TODO: Use pagination
+    if (response.ok) {
+      const data: unknown = await response.json();
+      setCategories(isApiResponse<Service>(data) ? data.items : []);
+    } else {
+      setCategories([]);
+    }
   };
 
   useEffect(() => {
@@ -29,19 +36,17 @@ const useServices = (category: string | null) => {
   const [services, setServices] = useState<Service[]>([]);
 
   const fetchData = async () => {
-    const url = new URL(`${BASE_URL}/services/records`);
-    url.searchParams.set("page", "1");
-    url.searchParams.set("perPage", "20");
-    url.searchParams.set("sort", "name");
+    const response = await fetch(`${BASE_URL}/services?category=${category}`);
 
-    if (category) {
-      url.searchParams.set("filter", `category="${category}"`);
-      const response = await fetch(url);
-      const data = await response.json();
-
-      setServices(data?.items);
-    } else {
-      setServices([]);
+    // TODO: Use the error message sent by the API
+    // TODO: Use pagination
+    if (response.ok) {
+      const data: unknown = await response.json();
+      if (category) {
+        setServices(isApiResponse<Service>(data) ? data.items : []);
+      } else {
+        setServices([]);
+      }
     }
   };
 

@@ -3,16 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
 import type { Business } from "../common";
-import { FILE_URL } from "../common/utils";
+import { FILE_API_URL } from "../common/utils";
 import { RatingDisplay } from "./RatingDisplay";
 
 export const BusinessCard: FC<{ business: Business }> = ({ business }) => (
   <div className="card card-compact sm:card-side bg-base-100 shadow-xl sm:max-h-52">
-    <figure className="min-w-fit">
+    <figure className="min-w-fit sm:h-52">
       <Image
         src={
           business.thumbnail
-            ? `${FILE_URL}/${business.collectionId}/${business.id}/${business.thumbnail}?thumb=200x200`
+            ? `${FILE_API_URL}/${business.collectionId}/${business.id}/${business.thumbnail}?thumb=200x200`
             : "https://placeimg.com/400/400/arch"
         }
         alt="Business logo"

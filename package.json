@@ -15,6 +15,7 @@
     "@types/react-dom": "18.0.9",
     "autoprefixer": "^10.4.13",
     "clsx": "^1.2.1",
+    "cors": "^2.8.5",
     "daisyui": "^2.42.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
@@ -24,5 +25,8 @@
     "react-dom": "18.2.0",
     "tailwindcss": "^3.2.4",
     "typescript": "4.9.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13"
   }
 }
