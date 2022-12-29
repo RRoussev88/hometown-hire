@@ -51,10 +51,12 @@ export const RegisterForm: FC = () => {
         loginUser(data.record, data.token);
         setIsOpen(false);
       } else {
-        setError(signInResponse.statusText);
+        const data: { error: string } = await signInResponse.json();
+        setError(data.error);
       }
     } else {
-      setError(signUpResponse.statusText);
+      const data: { error: string } = await signUpResponse.json();
+      setError(data.error);
     }
   };
 

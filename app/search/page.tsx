@@ -1,19 +1,30 @@
-import type { Business } from "../../common";
+import type { APIResponse, Business } from "../../common";
 import { BASE_URL, isApiResponse } from "../../common/utils";
 import { BusinessCard, SearchForm } from "../../components";
 
-const getBusinesses = async (searchTerm?: string) => {
+const getBusinesses = async (
+  searchTerm?: string
+): Promise<[APIResponse<Business>, string]> => {
+  const defResponse: APIResponse<Business> = {
+    page: 0,
+    perPage: 0,
+    totalItems: 0,
+    totalPages: 0,
+    items: [],
+  };
   const response = await fetch(
     `${BASE_URL}/businesses?serviceId=${searchTerm}`
   );
 
-  // TODO: Use the error message sent by the API
   // TODO: Use pagination
+  const data: unknown = await response.json();
   if (response.ok) {
-    const data: unknown = await response.json();
-    return isApiResponse<Business>(data) ? data.items : [];
+    return [isApiResponse<Business>(data) ? data : defResponse, ""];
   }
-  return [];
+  return [
+    defResponse,
+    (data as { error: string })?.error ?? "Failed to load businesses data",
+  ];
 };
 
 export default async function SearchPage({
@@ -21,7 +32,7 @@ export default async function SearchPage({
 }: {
   searchParams: { serviceId?: string };
 }) {
-  const businesses: Business[] = await getBusinesses(searchParams.serviceId);
+  const [businesses, error] = await getBusinesses(searchParams.serviceId);
 
   return (
     <main className="p-6">
@@ -29,13 +40,17 @@ export default async function SearchPage({
         <SearchForm />
       </section>
       <section>
-        {businesses.length ? (
+        {!!error && (
+          <p className="bg-base-100 p-6 rounded-lg shadow-xl">{error}</p>
+        )}
+        {!error && !!businesses.items.length && (
           <div className="flex flex-wrap gap-6">
-            {businesses.map((business) => (
+            {businesses.items.map((business) => (
               <BusinessCard key={business.id} business={business} />
             ))}
           </div>
-        ) : (
+        )}
+        {!error && !businesses.items.length && (
           <p className="bg-base-100 p-6 rounded-lg shadow-xl">
             {searchParams.serviceId && searchParams.serviceId !== "undefined"
               ? "No businesses offering that service"

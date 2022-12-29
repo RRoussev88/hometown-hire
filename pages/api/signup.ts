@@ -11,9 +11,8 @@ export default async function handler(
   await runMiddleware(req, res, Cors);
 
   const { email, password, passwordConfirm } = JSON.parse(req.body);
-  const err = { error: "Signup failed" };
   if (!email || !password || !passwordConfirm) {
-    res.status(500).json(err);
+    res.status(400).json({ error: "Valid credentials are required" });
   }
 
   // TODO: use pockebase npm library
@@ -27,6 +26,8 @@ export default async function handler(
     const data: SignupResponse = await response.json();
     res.status(200).json(data);
   } else {
-    res.status(500).json(err);
+    res
+      .status(response.status ?? 500)
+      .json({ error: response.statusText ?? "Signup failed" });
   }
 }

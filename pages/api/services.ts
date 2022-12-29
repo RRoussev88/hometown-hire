@@ -26,6 +26,8 @@ export default async function handler(
     const data: Data = await response.json();
     res.status(200).json(data);
   } else {
-    res.status(500).json({ error: "Failed to load services data" });
+    res.status(response.status ?? 500).json({
+      error: response.statusText ?? "Failed to load services data",
+    });
   }
 }

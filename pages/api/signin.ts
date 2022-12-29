@@ -11,11 +11,10 @@ export default async function handler(
   await runMiddleware(req, res, Cors);
 
   const { email, password } = JSON.parse(req.body);
-  const err = { error: "Signin failed" };
   if (!email || !password) {
-    res.status(500).json(err);
+    res.status(400).json({ error: "Valid credentials are required" });
   }
-  
+
   // TODO: use pockebase npm library
   const response = await fetch(`${BASE_API_URL}/users/auth-with-password`, {
     method: "POST",
@@ -27,6 +26,8 @@ export default async function handler(
     const data: SigninResponse = await response.json();
     res.status(200).json(data);
   } else {
-    res.status(500).json(err);
+    res
+      .status(response.status ?? 500)
+      .json({ error: response.statusText ?? "Signin failed" });
   }
 }
