@@ -1,6 +1,6 @@
 import type { APIResponse, Business } from "../../common";
 import { BASE_URL, isApiResponse } from "../../common/utils";
-import { BusinessCard, SearchForm } from "../../components";
+import { Alert, BusinessCard, SearchForm } from "../../components";
 
 const getBusinesses = async (
   searchTerm?: string
@@ -40,9 +40,7 @@ export default async function SearchPage({
         <SearchForm />
       </section>
       <section>
-        {!!error && (
-          <p className="bg-base-100 p-6 rounded-lg shadow-xl">{error}</p>
-        )}
+        {!!error && <Alert text={error} mode="error" />}
         {!error && !!businesses.items.length && (
           <div className="flex flex-wrap gap-6">
             {businesses.items.map((business) => (
@@ -51,11 +49,14 @@ export default async function SearchPage({
           </div>
         )}
         {!error && !businesses.items.length && (
-          <p className="bg-base-100 p-6 rounded-lg shadow-xl">
-            {searchParams.serviceId && searchParams.serviceId !== "undefined"
-              ? "No businesses offering that service"
-              : "No service is selected"}
-          </p>
+          <Alert
+            mode="info"
+            text={
+              searchParams.serviceId && searchParams.serviceId !== "undefined"
+                ? "No businesses offering that service"
+                : "No service is selected"
+            }
+          />
         )}
       </section>
     </main>

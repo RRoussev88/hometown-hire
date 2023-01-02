@@ -18,8 +18,10 @@ const useCategories = () => {
     } else {
       setCategories([]);
       toast.error(
-        (data as { error: string })?.error ??
+        `Service Categories error: ${
+          (data as { error: string })?.error ??
           "Failed to load service categories data"
+        }`
       );
     }
   };
@@ -47,7 +49,9 @@ const useServices = (category: string | null) => {
       }
     } else {
       toast.error(
-        (data as { error: string })?.error ?? "Failed to load services data"
+        `Services error: ${
+          (data as { error: string })?.error ?? "Failed to load services data"
+        }`
       );
     }
   };

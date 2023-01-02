@@ -1,3 +1,4 @@
+export * from "./Alert";
 export * from "./BaseHead";
 export * from "./BusinessCard";
 export * from "./Footer";

@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import React, { FC, PropsWithChildren, useRef } from "react";
-import { useIsVisible } from "../common";
+import { useIsVisible } from "../hooks";
 
 type ModalDialogType = {
   isModalOpen: boolean;
