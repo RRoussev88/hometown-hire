@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { FC, useContext, useEffect, useState } from "react";
-import { BASE_URL, emailValidator, passwordValidator, User } from "../common";
+import { BASE_API_URL, emailValidator, passwordValidator, User } from "../common";
 import { GlobalContext } from "../context/GlobalContext";
 import { useValidatedInput } from "../hooks";
 import { ModalDialog } from "./ModalDialog";
@@ -27,14 +27,14 @@ export const RegisterForm: FC = () => {
       return;
     }
 
-    const signUpResponse = await fetch(`${BASE_URL}/signup`, {
+    const signUpResponse = await fetch(`${BASE_API_URL}/signup`, {
       method: "POST",
       body: JSON.stringify({ email, password, passwordConfirm }),
     });
 
     if (signUpResponse.ok) {
       setError("");
-      const signInResponse = await fetch(`${BASE_URL}/signin`, {
+      const signInResponse = await fetch(`${BASE_API_URL}/signin`, {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });

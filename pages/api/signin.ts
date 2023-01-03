@@ -1,8 +1,16 @@
-import type { User } from "../../common";
-import { BASE_API_URL, Cors, runMiddleware } from "../../common/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { RecordAuthResponse } from "pocketbase";
+import PocketBase from "pocketbase";
 
-type SigninResponse = { record: User; token: string } | { error: string };
+import type { User } from "../../common";
+import {
+  BACKEND_URL,
+  Cors,
+  isClientResponseError,
+  runMiddleware,
+} from "../../common/utils";
+
+type SigninResponse = RecordAuthResponse<User> | { error: string };
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,19 +23,19 @@ export default async function handler(
     res.status(400).json({ error: "Valid credentials are required" });
   }
 
-  // TODO: use pockebase npm library
-  const response = await fetch(`${BASE_API_URL}/users/auth-with-password`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identity: email, password }),
-  });
+  const pb = new PocketBase(BACKEND_URL);
+  const err = "Signin failed";
+  try {
+    const data: RecordAuthResponse<User> = await pb
+      .collection("users")
+      .authWithPassword(email, password);
 
-  if (response.ok) {
-    const data: SigninResponse = await response.json();
     res.status(200).json(data);
-  } else {
-    res
-      .status(response.status ?? 500)
-      .json({ error: response.statusText ?? "Signin failed" });
+  } catch (error) {
+    if (isClientResponseError(error)) {
+      res.status(error.status).json({ error: error.data.message ?? err });
+    } else {
+      res.status(500).json({ error: err });
+    }
   }
 }

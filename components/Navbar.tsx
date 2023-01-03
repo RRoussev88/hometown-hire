@@ -28,7 +28,7 @@ export const Navbar: FC = () => {
       </div>
       <div className="navbar-end">
         <ul className="menu menu-horizontal p-0 bg-primary">
-          {path !== '/profile' &&
+          {path !== "/profile" &&
             (user ? (
               <li className="max-lg:hidden">
                 <span>Profile</span>
@@ -88,39 +88,40 @@ export const Navbar: FC = () => {
             tabIndex={0}
             className="dropdown-content menu menu-compact p-2 shadow bg-base-200 rounded-box w-32"
           >
-            {user ? (
-              <li className="relative">
-                <label className="font-medium justify-end">Profile</label>
-                <ul className="absolute -left-full menu menu-compact p-2 shadow bg-base-200 rounded-box w-32">
-                  <li>
-                    <Link
-                      href="/profile"
-                      className="btn btn-ghost normal-case text-base"
-                    >
-                      Details
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/"
-                      className="btn btn-ghost normal-case text-base"
-                      onClick={logoutUser}
-                    >
-                      Logout
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-            ) : (
-              <li>
-                <label
-                  htmlFor="login-modal"
-                  className="font-medium  justify-end"
-                >
-                  Login
-                </label>
-              </li>
-            )}
+            {path !== "/profile" &&
+              (user ? (
+                <li className="relative">
+                  <label className="font-medium justify-end">Profile</label>
+                  <ul className="absolute -left-full menu menu-compact p-2 shadow bg-base-200 rounded-box w-32">
+                    <li>
+                      <Link
+                        href="/profile"
+                        className="btn btn-ghost normal-case text-base"
+                      >
+                        Details
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/"
+                        className="btn btn-ghost normal-case text-base"
+                        onClick={logoutUser}
+                      >
+                        Logout
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              ) : (
+                <li>
+                  <label
+                    htmlFor="login-modal"
+                    className="font-medium  justify-end"
+                  >
+                    Login
+                  </label>
+                </li>
+              ))}
             <li className="relative">
               <label className="font-medium justify-end">EN</label>
               <ul className="absolute -left-full menu menu-compact p-2 shadow bg-base-200 rounded-box w-32">

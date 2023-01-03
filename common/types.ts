@@ -1,14 +1,16 @@
+import type { ListResult, Record as CollectionRecord} from "pocketbase";
+
 // Use Moment type in the future or at least an union of string and number.
 // Better store the timestamp as a number
 type DateString = string;
 
-interface CollectionRecord {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created?: DateString;
-  updated?: DateString;
-}
+// interface CollectionRecord {
+//   id: string;
+//   collectionId: string;
+//   collectionName: string;
+//   created?: DateString;
+//   updated?: DateString;
+// }
 
 export interface User extends CollectionRecord {
   avatar: string | null;
@@ -61,10 +63,4 @@ export interface Business extends CollectionRecord {
   thumbnail: string;
 }
 
-export type APIResponse<T = object> = {
-  page: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
-  items: T[];
-};
+export type APIResponse<T = CollectionRecord> = ListResult<T>;

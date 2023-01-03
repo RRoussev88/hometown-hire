@@ -1,5 +1,5 @@
 import type { APIResponse, Business } from "../../common";
-import { BASE_URL, isApiResponse } from "../../common/utils";
+import { BASE_API_URL, isApiResponse } from "../../common/utils";
 import { Alert, BusinessCard, SearchForm } from "../../components";
 
 const getBusinesses = async (
@@ -13,7 +13,7 @@ const getBusinesses = async (
     items: [],
   };
   const response = await fetch(
-    `${BASE_URL}/businesses?serviceId=${searchTerm}`
+    `${BASE_API_URL}/businesses?serviceId=${searchTerm}`
   );
 
   // TODO: Use pagination

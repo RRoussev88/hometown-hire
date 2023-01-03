@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
 import type { Business } from "../common";
-import { FILE_API_URL } from "../common/utils";
+import { FILES_URL } from "../common/utils";
 import { RatingDisplay } from "./RatingDisplay";
 
 export const BusinessCard: FC<{ business: Business }> = ({ business }) => (
@@ -12,7 +12,7 @@ export const BusinessCard: FC<{ business: Business }> = ({ business }) => (
       <Image
         src={
           business.thumbnail
-            ? `${FILE_API_URL}/${business.collectionId}/${business.id}/${business.thumbnail}?thumb=200x200`
+            ? `${FILES_URL}/${business.collectionId}/${business.id}/${business.thumbnail}?thumb=200x200`
             : "https://placeimg.com/400/400/arch"
         }
         alt="Business logo"

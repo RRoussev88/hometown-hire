@@ -1,6 +1,13 @@
-import type { APIResponse, Service } from "../../common";
-import { BASE_API_URL, Cors, runMiddleware } from "../../common/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
+import PocketBase from "pocketbase";
+
+import type { APIResponse, Service } from "../../common";
+import {
+  BACKEND_URL,
+  Cors,
+  isClientResponseError,
+  runMiddleware,
+} from "../../common/utils";
 
 type Data = APIResponse<Service> | { error: string };
 
@@ -10,24 +17,22 @@ export default async function handler(
 ) {
   await runMiddleware(req, res, Cors);
 
-  const url = new URL(`${BASE_API_URL}/services/records`);
-  url.searchParams.set("page", "1");
-  url.searchParams.set("perPage", "20");
-  url.searchParams.set("sort", "name");
+  const pb = new PocketBase(BACKEND_URL);
+  const err = "Failed to load services data";
+  try {
+    const data: APIResponse<Service> = await pb
+      .collection("services")
+      .getList(1, 20, {
+        sort: "name",
+        filter: req.query.category ? `category="${req.query.category}"` : "",
+      });
 
-  const { category } = req.query;
-  if (category) {
-    url.searchParams.set("filter", `category="${category}"`);
-  }
-  // TODO: use pockebase npm library
-  const response = await fetch(url);
-
-  if (response.ok) {
-    const data: Data = await response.json();
     res.status(200).json(data);
-  } else {
-    res.status(response.status ?? 500).json({
-      error: response.statusText ?? "Failed to load services data",
-    });
+  } catch (error) {
+    if (isClientResponseError(error)) {
+      res.status(error.status).json({ error: error.data.message ?? err });
+    } else {
+      res.status(500).json({ error: err });
+    }
   }
 }

@@ -3,13 +3,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { FC, useCallback, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
-import { BASE_URL, isApiResponse, Service, ServiceCategory } from "../common";
+import { BASE_API_URL, isApiResponse, Service, ServiceCategory } from "../common";
 
 const useCategories = () => {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
 
   const fetchData = async () => {
-    const response = await fetch(`${BASE_URL}/serviceCategories`);
+    const response = await fetch(`${BASE_API_URL}/serviceCategories`);
 
     // TODO: Use pagination
     const data: unknown = await response.json();
@@ -37,7 +37,7 @@ const useServices = (category: string | null) => {
   const [services, setServices] = useState<Service[]>([]);
 
   const fetchData = async () => {
-    const response = await fetch(`${BASE_URL}/services?category=${category}`);
+    const response = await fetch(`${BASE_API_URL}/services?category=${category}`);
 
     // TODO: Use pagination
     const data: unknown = await response.json();

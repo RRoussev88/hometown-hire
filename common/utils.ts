@@ -1,6 +1,7 @@
-import type { APIResponse } from "./types";
-import type { NextApiRequest, NextApiResponse } from "next";
 import cors from "cors";
+import type { ClientResponseError } from "pocketbase";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { APIResponse } from "./types";
 
 export const Cors = cors({ methods: ["POST", "GET", "HEAD", "PUT", "PATCH"] });
 
@@ -21,9 +22,9 @@ export const runMiddleware = (
     });
   });
 
-export const BASE_URL = "http://127.0.0.1:3000/api";
-export const BASE_API_URL = "http://127.0.0.1:8090/api/collections";
-export const FILE_API_URL = "http://127.0.0.1:8090/api/files";
+export const BASE_API_URL = "http://127.0.0.1:3000/api";
+export const BACKEND_URL = "http://127.0.0.1:8090";
+export const FILES_URL = `${BACKEND_URL}/api/files`;
 
 export const StorageKeys = {
   ACCESS_TOKEN: "accessToken",
@@ -51,3 +52,12 @@ export const isApiResponse = <T>(res: unknown): res is APIResponse<T> =>
   !Number.isNaN((res as APIResponse).page) &&
   !Number.isNaN((res as APIResponse).totalItems) &&
   Array.isArray((res as APIResponse).items);
+
+export const isClientResponseError = (
+  error: unknown
+): error is ClientResponseError =>
+  !Number.isNaN((error as ClientResponseError).status) &&
+  typeof (error as ClientResponseError).url === "string" &&
+  typeof (error as ClientResponseError).data === "object" &&
+  typeof (error as ClientResponseError).isAbort === "boolean" &&
+  "originalError" in (error as ClientResponseError);
