@@ -3,7 +3,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { FC, useCallback, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
-import { BASE_API_URL, isApiResponse, Service, ServiceCategory } from "../common";
+import {
+  BASE_API_URL,
+  isApiResponse,
+  Service,
+  ServiceCategory,
+} from "../common";
 
 const useCategories = () => {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
@@ -34,19 +39,22 @@ const useCategories = () => {
 };
 
 const useServices = (category: string | null) => {
+  console.log('cat: ', category);
   const [services, setServices] = useState<Service[]>([]);
 
   const fetchData = async () => {
-    const response = await fetch(`${BASE_API_URL}/services?category=${category}`);
+    if (!category) {
+      setServices([]);
+      return;
+    }
+    const response = await fetch(
+      `${BASE_API_URL}/services?category=${category}`
+    );
 
     // TODO: Use pagination
     const data: unknown = await response.json();
     if (response.ok) {
-      if (category) {
-        setServices(isApiResponse<Service>(data) ? data.items : []);
-      } else {
-        setServices([]);
-      }
+      setServices(isApiResponse<Service>(data) ? data.items : []);
     } else {
       toast.error(
         `Services error: ${
@@ -74,6 +82,10 @@ export const SearchForm: FC = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(
     () => services?.[0] ?? null
   );
+
+  useEffect(() => {
+    setSelectedCategory(categories?.[0]);
+  }, [categories]);
 
   useEffect(() => {
     setSelectedService(services?.[0]);
