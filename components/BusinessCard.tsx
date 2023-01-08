@@ -8,7 +8,7 @@ import { RatingDisplay } from "./RatingDisplay";
 
 export const BusinessCard: FC<{ business: Business }> = ({ business }) => (
   <div className="card card-compact sm:card-side bg-base-100 shadow-xl sm:max-h-52">
-    <figure className="min-w-fit sm:h-52">
+    <figure className="sm:w-60 sm:h-52">
       <Image
         src={
           business.thumbnail
@@ -20,7 +20,7 @@ export const BusinessCard: FC<{ business: Business }> = ({ business }) => (
         height={200}
       />
     </figure>
-    <div className="card-body w-80">
+    <div className="card-body w-60">
       <div className="flex justify-between">
         <h2 className="card-title w-48 text-ellipsis overflow-hidden">
           {business.name}

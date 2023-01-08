@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -19,12 +19,12 @@
     "daisyui": "^2.42.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
-    "next": "13.0.5",
+    "next": "13.1.1",
     "pocketbase": "^0.9.1",
     "postcss": "^8.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-query": "^3.39.2",
+    "react-query": "~3.39.2",
     "react-toastify": "^9.1.1",
     "tailwindcss": "^3.2.4",
     "typescript": "4.9.3"

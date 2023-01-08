@@ -1,4 +1,4 @@
-import type { ListResult, Record as CollectionRecord} from "pocketbase";
+import type { ListResult, Record as CollectionRecord } from "pocketbase";
 
 // Use Moment type in the future or at least an union of string and number.
 // Better store the timestamp as a number

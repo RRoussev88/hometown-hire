@@ -12,6 +12,10 @@ const getBusinesses = async (
     totalPages: 0,
     items: [],
   };
+  if (!searchTerm || searchTerm === "undefined") {
+    return [defResponse, ""];
+  }
+
   const response = await fetch(
     `${BASE_API_URL}/businesses?serviceId=${searchTerm}`
   );

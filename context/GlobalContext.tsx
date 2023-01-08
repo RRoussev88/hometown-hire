@@ -1,5 +1,11 @@
 "use client";
-import { createContext, FC, PropsWithChildren, useState } from "react";
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 import { StorageKeys, User } from "../common";
 
@@ -21,14 +27,13 @@ const getUserData = (): User | null => {
     } catch (error) {
       console.error("Error parsing current user data", error);
     }
-    return user;
   }
   return user;
 };
 
 const globalState: GlobalStateType = {
   [StorageKeys.ACCESS_TOKEN]: "",
-  [StorageKeys.CURRENT_USER]: getUserData(),
+  [StorageKeys.CURRENT_USER]: null,
   [StorageKeys.COLOR_THEME]: "bumblebee",
   [StorageKeys.SELECTED_LOCALE]: "EN",
   logoutUser: () => {},
@@ -40,6 +45,13 @@ export const GlobalContext = createContext<GlobalStateType>(globalState);
 export const GlobalProvider: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const [state, setState] = useState<GlobalStateType>(globalState);
+
+  useEffect(() => {
+    setState({
+      ...globalState,
+      [StorageKeys.CURRENT_USER]: getUserData(),
+    });
+  }, []);
 
   return (
     <GlobalContext.Provider

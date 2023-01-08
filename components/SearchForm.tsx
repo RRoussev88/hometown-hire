@@ -1,45 +1,37 @@
 "use client";
 import "react-toastify/dist/ReactToastify.css";
+import clsx from "clsx";
 import { FC, useCallback, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
+import { useQuery } from "react-query";
 import {
+  APIError,
+  APIResponse,
   BASE_API_URL,
   isApiResponse,
   Service,
   ServiceCategory,
 } from "../common";
+import { Search } from "./SvgIcons";
 
-const useCategories = () => {
-  const [categories, setCategories] = useState<ServiceCategory[]>([]);
+const fetchCategories = async () => {
+  const response = await fetch(`${BASE_API_URL}/serviceCategories`);
 
-  const fetchData = async () => {
-    const response = await fetch(`${BASE_API_URL}/serviceCategories`);
+  const data: APIResponse<ServiceCategory> | APIError = await response.json();
+  if (response.ok) {
+    toast.dismiss();
+    return data as APIResponse<ServiceCategory>;
+  }
 
-    // TODO: Use pagination
-    const data: unknown = await response.json();
-    if (response.ok) {
-      setCategories(isApiResponse<Service>(data) ? data.items : []);
-    } else {
-      setCategories([]);
-      toast.error(
-        `Service Categories error: ${
-          (data as { error: string })?.error ??
-          "Failed to load service categories data"
-        }`
-      );
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  return categories;
+  toast.error(
+    (data as APIError).isSystemError
+      ? (data as APIError).message
+      : "Service Categories error: Failed to load service categories data"
+  );
 };
 
 const useServices = (category: string | null) => {
-  console.log('cat: ', category);
   const [services, setServices] = useState<Service[]>([]);
 
   const fetchData = async () => {
@@ -74,9 +66,12 @@ const useServices = (category: string | null) => {
 };
 
 export const SearchForm: FC = () => {
-  const categories = useCategories();
+  const { data: categories, isLoading: isLoadingCategories } = useQuery<
+    APIResponse<ServiceCategory> | undefined
+  >("categories", fetchCategories);
+
   const [selectedCategory, setSelectedCategory] =
-    useState<ServiceCategory | null>(() => categories?.[0] ?? null);
+    useState<ServiceCategory | null>(() => categories?.items[0] ?? null);
 
   const services = useServices(selectedCategory?.id ?? null);
   const [selectedService, setSelectedService] = useState<Service | null>(
@@ -84,11 +79,11 @@ export const SearchForm: FC = () => {
   );
 
   useEffect(() => {
-    setSelectedCategory(categories?.[0]);
+    setSelectedCategory(categories?.items[0] ?? null);
   }, [categories]);
 
   useEffect(() => {
-    setSelectedService(services?.[0]);
+    setSelectedService(services?.[0] ?? null);
   }, [services]);
 
   return (
@@ -101,15 +96,15 @@ export const SearchForm: FC = () => {
               className="select select-bordered truncate"
               onChange={(event) =>
                 setSelectedCategory(
-                  categories.find(
+                  categories?.items.find(
                     (category) => category.name === event.target.value
                   ) ?? null
                 )
               }
             >
-              {categories.map((category: ServiceCategory) => (
+              {categories?.items.map((category: ServiceCategory) => (
                 <option key={category.id}>{category.name}</option>
-              ))}
+              )) ?? null}
             </select>
           </div>
           <div className="form-control w-full sm:w-1/2">
@@ -140,26 +135,13 @@ export const SearchForm: FC = () => {
         </div>
         <Link
           href={`/search?serviceId=${selectedService?.id}`}
-          className="btn btn-primary"
+          className={clsx("btn btn-primary", { loading: isLoadingCategories })}
         >
           Search&nbsp;
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <Search />
         </Link>
       </form>
-      <ToastContainer hideProgressBar newestOnTop theme="colored" />
+      <ToastContainer hideProgressBar newestOnTop theme="colored" limit={3} />
     </>
   );
 };

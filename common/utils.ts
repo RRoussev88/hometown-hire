@@ -57,7 +57,17 @@ export const isClientResponseError = (
   error: unknown
 ): error is ClientResponseError =>
   !Number.isNaN((error as ClientResponseError).status) &&
+  (error as ClientResponseError).status >= 400 &&
   typeof (error as ClientResponseError).url === "string" &&
   typeof (error as ClientResponseError).data === "object" &&
   typeof (error as ClientResponseError).isAbort === "boolean" &&
   "originalError" in (error as ClientResponseError);
+
+export class APIError {
+  isSystemError = true;
+  message: string;
+
+  constructor(message: string) {
+    this.message = message;
+  }
+}
